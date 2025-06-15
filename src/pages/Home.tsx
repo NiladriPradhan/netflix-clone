@@ -11,7 +11,7 @@ const Home = () => {
       <Row title={"Trenting now"} fetchUrl={requests?.fetch_trending} />
       <Row title={"top rated"} fetchUrl={requests?.fetch_netflix_originals} />
       <Row title={"popular"} fetchUrl={requests?.fetch_most_popular_movies} />
-      <Row title={"comedy movies"} fetchUrl={requests?.fetch_action_movies} />
+      <Row title={"Actions movies"} fetchUrl={requests?.fetch_action_movies} />
       <Row title={"comedy movies"} fetchUrl={requests?.fetch_comedy_movies} />
       <Row title={"horror movies"} fetchUrl={requests?.fetch_horror_movies} />
       <Row

@@ -20,11 +20,14 @@ const Banner = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(requests.fetch_netflix_originals);
-      const results: Movie[] = res.data.results;
+      const res = await axios.get<{ results: Movie[] }>(
+        requests.fetch_netflix_originals
+      ); // 👈 Axios response type hint
+      const results = res.data.results;
       const randomMovie = results[Math.floor(Math.random() * results.length)];
       setRandomBanner(randomMovie);
-    } catch (error) {
+    } catch (error: unknown) {
+      // 👈 safe error type
       console.error("Failed to fetch banner:", error);
     }
   }, []);
@@ -43,18 +46,19 @@ const Banner = () => {
           randomBanner?.original_name ||
           ""
       )
-        .then((url) => {
+        .then((url: string | null) => {
           if (url) {
             const urlParams = new URLSearchParams(new URL(url).search);
             setTrailerUrl(urlParams.get("v") || "");
           } else {
             console.warn("Trailer URL not found for this movie.");
-            setTrailerUrl(""); // Optional: clear trailer state
+            setTrailerUrl("");
           }
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
+          // 👈 safe error handling
           console.error("Trailer not found:", error);
-          setTrailerUrl(""); // Prevent crashing if no trailer
+          setTrailerUrl("");
         });
     }
   };
@@ -80,7 +84,7 @@ const Banner = () => {
       {randomBanner.backdrop_path && (
         <img
           src={`https://image.tmdb.org/t/p/original/${randomBanner.backdrop_path}`}
-          alt={randomBanner.title || randomBanner.name}
+          alt={randomBanner.title || randomBanner.name || "Banner Image"}
           className="w-full h-full object-cover"
           loading="lazy"
         />

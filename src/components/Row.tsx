@@ -20,15 +20,16 @@ interface Props {
 
 const Row: React.FC<Props> = ({ title, fetchUrl }) => {
   const imageBaseUrl = "https://image.tmdb.org/t/p/w500";
+
   const [movies, setMovies] = useState<Movie[]>([]);
   const [trailerUrl, setTrailerUrl] = useState<string>("");
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await axios.get(fetchUrl);
+        const res = await axios.get<{ results: Movie[] }>(fetchUrl);
         setMovies(res.data.results);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("Error fetching movies:", error);
       }
     };
@@ -40,11 +41,15 @@ const Row: React.FC<Props> = ({ title, fetchUrl }) => {
       setTrailerUrl(""); // close trailer if already open
     } else {
       movieTrailer(movie?.title || movie?.name || movie?.original_name || "")
-        .then((url) => {
-          const urlParams = new URLSearchParams(new URL(url!).search);
-          setTrailerUrl(urlParams.get("v") || "");
+        .then((url: string | null) => {
+          if (url) {
+            const urlParams = new URLSearchParams(new URL(url).search);
+            setTrailerUrl(urlParams.get("v") || "");
+          } else {
+            console.error("No trailer URL found");
+          }
         })
-        .catch((error) => console.error("Trailer not found:", error));
+        .catch((error: unknown) => console.error("Trailer not found:", error));
     }
   };
 

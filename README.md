@@ -18,9 +18,9 @@ The Netflix Clone is a front-end web application that mimics the look and feel o
 
 🛠️ Tech Stack
 
-React / Next.js (if used)
+React
 
-Tailwind CSS / Styled Components
+Tailwind CSS
 
 TMDB API (or your API)
 
